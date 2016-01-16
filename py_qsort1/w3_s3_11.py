@@ -9,6 +9,15 @@ Sample Input:
 Sample Output:
 4 7 1000000
 """
+# Подсчет суммы предыдыущих элементов для каждого элемента с сохранением
+# в переданном списке
+def count_sum(arr, m):
+    prev_elem = 0
+    for i in range(1, m):
+        temp = prev_elem
+        prev_elem = arr[i]
+        arr[i] = temp + arr[i - 1]
+    arr[0] = 0 # Перед нулевым элементом ничего не может быть
 
 def radix_sort_byte(arr):
     num_bytes = 64
@@ -30,12 +39,12 @@ def radix_sort_byte(arr):
             byte = (elem & mask) >> (k * byte_pos)
             count[byte] += 1
         # Суммируем количество элементов до каждого в списке
-        for i in range(1, m):
-            count[i] += count[i - 1] #### ERROR - неправильно подсчитывается - ИСПРАВИТЬ   
-        # И размещаем в ней элементы на свои места в соответвтии с количеством вхождений
+        count_sum(count, m)   
+        # И размещаем в ней элементы на свои места в соответствии с количеством вхождений
         for elem in arr:
             byte = (elem & mask) >> (k * byte_pos)
-            dest_arr[count[byte] - 1] = elem
+            pos = count[byte]
+            dest_arr[pos] = elem
             count[byte] += 1 # Увеличиваем счетчик вхождений на случай одинаковых элементов
         # Меняем местами списки
         arr, dest_arr = dest_arr, arr
@@ -72,6 +81,19 @@ def test():
     print("**********")
     assert radix_sort_byte([1234568, 1234567]) == [1234567, 1234568]
 
+def test_sum_count():
+    arr1 = [0, 1, 1, 2, 0, 3, 0]
+    count_sum(arr1, len(arr1))
+    arr2 = [1]
+    count_sum(arr2, len(arr2))
+    arr3 = [0, 0, 1]
+    count_sum(arr3, len(arr3))
+    arr4 = [1, 0, 0]
+    count_sum(arr4, len(arr4))
+    arr5 = [0, 0, 0, 0, 1, 1, 2]
+    count_sum(arr5, len(arr5))
+    pass
+    
 
 
 if __name__ == "__main__":
