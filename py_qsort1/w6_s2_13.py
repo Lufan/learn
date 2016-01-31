@@ -30,190 +30,162 @@ Sample Output:
 import sys
 import math
 
-def get_parent_pos(pos: int) -> int:
-    return int((pos - 1) / 2)
-def get_child1_pos(pos: int):
-    return pos * 2 + 1
-def get_child2_pos(pos: int):
-        return pos * 2 + 2
+class Tree_naive:
+    x = -1        # key
 
-def naive_append_node(elem: int, pos: int, data: list) -> int:
-    size = len(data)
-    if size == 0:
-        data.append(elem)
-        return 0
-    if pos == size:
-        data.append(elem)
-        return size
-    if pos > size:
-        count = pos - size
-        while count >= 0:
-            data.append(None)
-            count -= 1
-        data[pos] = elem
-        return pos
-    if data[pos] == None:
-        data[pos] = elem
-        return pos
-    if data[pos] <= elem:
-        res = naive_append_node(elem, get_child2_pos(pos), data)
-        return res
-    else:
-        res = naive_append_node(elem, get_child1_pos(pos), data)
-        return res
+    Left = None   # child node
+    Right = None  # child node
+    Parent = None # parent node
 
-def build_naive_btree(arr: list, data: list) -> None:
-    for elem in arr:
-        pos = naive_append_node(elem, 0, data)
+    def __init__(self, x: int, left = None, right = None, parent = None):
+        self.x = x
+        self.Left = left
+        self.Right = right
+        self.Parent = parent
 
-def dekart_append_node(elem: list, pos: int, data: list) -> int:
-    size = len(data)
-    if size == 0:
-        data.append(elem)
-        return 0
-    if pos == size:
-        data.append(elem)
-        return size
-    if pos > size:
-        count = pos - size
-        while count >= 0:
-            data.append(None)
-            count -= 1
-        data[pos] = elem
-        return pos
-    if data[pos] == None:
-        data[pos] = elem
-        return pos
-    # При добавлении узла (x, y) выполняйте спуск по ключу до узла P с меньшим приоритетом
-    if data[pos][1] < elem[1]:
-        left = []
-        right = []
-        result = [elem]
-        # Разбейте найденное поддерево по ключу x так, чтобы в первом поддереве все ключи < x, а во втором >= x
-        split(data, data[pos], elem[0], left, right)
-        # Получившиеся два дерева сделайте дочерними для нового узла (x, y).
-        # merge(result, left, right)
-        # Новый узел вставьте на место узла P.
-        # insert(data, pos, result)
-        return pos
-    else:
-        if data[pos][0] <= elem[0]:
-            res = dekart_append_node(elem, get_child2_pos(pos), data)
-            return res
+    def Add(self, elem: int):
+        if elem > self.x:
+            if self.Right == None:
+                self.Right = Tree_naive(elem)
+            else:
+                self.Right.Add(elem)
+            return self.Right
         else:
-            res = dekart_append_node(elem, get_child1_pos(pos), data)
-            return res
-
-    # Разбейте найденное поддерево по ключу x так, чтобы в первом поддереве все ключи < x, а во втором >= x
-    def split(data: list, pos: int, key: int, left: list, right: list):
-        def append_node(data: list, elem: list, pos: int) -> int:
-            size = len(data)
-            if size == 0:
-                data.append(elem)
-                return 0
-            if pos == size:
-                data.append(elem)
-                return size
-            if pos > size:
-                count = pos - size
-                while count >= 0:
-                    data.append(None)
-                    count -= 1
-                data[pos] = elem
-                return pos
-            if data[pos] == None:
-                data[pos] = elem
-                return pos
-            if data[pos][0] <= elem[0]:
-                res = append_node(data, elem, get_child2_pos(pos))
-                return res
+            if self.Left == None:
+                self.Left = Tree_naive(elem)
             else:
-                res = append_node(data, elem, get_child1_pos(pos))
-                return res
-        
-        temp = []
-        temp.append[pos]
-        while len(temp) > 0:
-            curr_pos = temp[0]
-            temp.remove(curr_pos)
-            if data[get_child1_pos(curr_pos)] != None:
-                temp.append(get_child1_pos(curr_pos))
-            if data[get_child2_pos(curr_pos)] != None:
-                temp.append(get_child2_pos(curr_pos))
-            if data[cur_pos][0] < key:
-                append_node(left, data[pos], 0)
-            else:
-                append_node(right, data[pos], 0)
-            data[cur_pos] = None
-        
+                self.Left.Add(elem)
+            return self.Left
 
-    # Получившиеся два дерева сделайте дочерними для нового узла (x, y).
-    def merge(result: list, left: list, right: list):
-        def new_child_left_pos(pos: int) -> int:
-            depth = math.ceil(math.log2(pos))
-            return pos + 2^depth
-        def new_child_right_pos(pos: int) -> int:
-            depth = math.ceil(math.log2(pos))
-            return pos + 2^(depth + 1)
-        
-        pos = 0
-        size = len(result)
-        for elem in left:
-            new_pos = new_child_left_pos(pos)
-            if size >= new_pos:
-                count = new_pos - size
-                while count >= 0:
-                    result.append(None)
-                    size += 1
-                    count -= 1
-                result[new_pos] = elem
-        for elem in right:
-            new_pos = new_child_right_pos(pos)
-            if size >= new_pos:
-                count = new_pos - size
-                while count >= 0:
-                    result.append(None)
-                    size += 1
-                    count -= 1
-                result[new_pos] = elem
-
-    # Новый узел вставьте на место узла P.
-    def insert(data: list, pos: int, result: list):
-        pass
-
-def build_dekart_btree(arr: list, data: list) -> None:
+def build_naive_btree(arr: list) -> Tree_naive:
+    if arr == []:
+        return None
+    top = Tree_naive(arr[0])
+    arr.remove(arr[0])
     for elem in arr:
-        pos = dekart_append_node(elem, 0, data)
+        top.Add(elem)
+    return top
 
-def diff_depth(arr1: list, arr2: list) -> int:
-    l1 = len(arr1)
-    l2 = len(arr2)
-    depth1 = math.ceil(math.log2(l1))
-    depth2 = math.ceil(math.log2(l2))
-    return depth1 - depth2
+class Treap:
+    x = -1        # key
+    y = -1        # priority
+
+    Left = None   # child node
+    Right = None  # child node
+    Parent = None # parent node
+
+    def __init__(self, x: int, y: int, left = None, right = None, parent = None):
+        self.x = x
+        self.y = y
+        self.Left = left
+        self.Right = right
+        self.Parent = parent
+
+    def Split(self, x: int) -> tuple:
+        newTree = None
+        R = None
+        L = None
+        if self.x <= x:
+            if self.Right == None:
+                R = None
+            else:
+                newTree, R = self.Right.Split(x);
+            L = Treap(self.x, self.y, self.Left, newTree);
+        else:
+            if self.Left == None:
+                L = None
+            else:
+                L, newTree = self.Left.Split(x)
+            R = Treap(self.x, self.y, newTree, self.Right)
+        return (L, R)
+
+    def Add(self, elem: list):
+        l = None
+        r = None
+        l, r = self.Split(elem[0])
+        m = Treap(elem[0], elem[1])
+        return self.Merge(self.Merge(l, m), r)
+
+    def Remove(self, elem: list):
+        l = None
+        m = None
+        r = None
+        l, r = self.Split(self.x - 1)
+        m, r = r.Split(x)
+        return self.Merge(l, r)
+
+    def Merge(self, L, R):
+        if L == None:
+            return R
+        if R == None:
+            return L
+        if L.y > R.y:
+            newR = Merge(L.Right, R)
+            return Treap(L.x, L.y, L.Left, newR)
+        else:
+            newL = Merge(L, R.Left)
+            return Treap(R.x, R.y, newL, R.Right)
+
+def build_dekart_btree(arr: list) -> Treap:
+    tree = Treap(arr[0][0], arr[0][1])
+    last = tree
+    for i in range(1, len(arr)):
+        if last.y > arr[i][1]:
+            last.Right = Treap(arr[i][0], arr[i][1], None, None, last)
+            last = last.Right
+        else:
+            cur = last
+            while (cur.Parent != None and cur.y <= arr[i][1]):
+                cur = cur.Parent;
+            if cur.y <= arr[i][1]:
+                last = Treap(arr[i][0], arr[i][1], cur)
+            else:
+                last = Treap(arr[i][0], arr[i][1], cur.Right, None, cur)
+                cur.Right = last
+    while (last.Parent != None):
+        last = last.Parent
+    return last
+
+def get_depth(node, count: int = 0) -> int:
+    if node == None:
+        return count
+    return max([get_depth(node.Left, count + 1), get_depth(node.Right, count + 1)])
 
 def main():
     reader = (list(map(int, line.split(" "))) for line in sys.stdin)
     n, = next(reader)
-    arr = next(reader)
+    arr = list(reader)
+    [sys.stderr.write(str(elem[0]) + str(' ') + str(elem[1])) for elem in arr]
     assert len(arr) == n
     
-    naive_data = []
-    build_naive_btree([elem[0] for elem in arr], naive_data)
+    top_node_nai = build_naive_btree([elem[0] for elem in arr])
+    depth1 = get_depth(top_node_nai)
 
-    dekart_data = []
-    build_dekart_btree(arr, dekart_data)
+    top_node_dec = build_dekart_btree(arr)
+    depth2 = get_depth(top_node_dec)
 
-    print("%d\n", diff_depth(naive_data, dekart_data))
+    print(depth1 - depth2)
+    print()
 
 def test():
     print("1 test start")
-    naive_data = []
-    build_naive_btree([5, 18, 25, 50, 30, 15, 20, 22, 40, 45], naive_data)
-    dekart_data = []
-    build_dekart_btree([[5, 11], [18, 8], [25, 7], [50, 12], [30, 30], [15, 15], [20, 10], [22, 5], [40, 20], [45, 9]], dekart_data)
-    assert diff_depth(naive_data, dekart_data) == 2
+
+    top_node_nai = build_naive_btree([5, 18, 25, 50, 30, 15, 20, 22, 40, 45])
+    depth1 = get_depth(top_node_nai)
+    top_node_dec = build_dekart_btree([[5, 11], [18, 8], [25, 7], [50, 12], [30, 30], [15, 15], [20, 10], [22, 5], [40, 20], [45, 9]])
+    depth2 = get_depth(top_node_dec)
+
+    assert depth1 - depth2 == 2
     print("1 test end\n")
+
+    print("2 test start")
+    top_node_nai = build_naive_btree([5])
+    depth1 = get_depth(top_node_nai)
+    top_node_dec = build_dekart_btree([[5, 11]])
+    depth2 = get_depth(top_node_dec)
+
+    assert depth1 - depth2 == 0
+    print("2 test end\n")
 
 if __name__ == "__main__":
     test()
