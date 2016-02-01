@@ -41,14 +41,16 @@ class node:
     def fixheight(self):
         hl = 0
         if self.Left != None:
-            hl = self.Left.height()
+            hl = self.Left.fixheight()
         hr = 0
         if self.Right != None:
-            hr = self.Right.height()
+            hr = self.Right.fixheight()
         if hl > hr:
             self.Height = hl + 1
+            return self.Height
         else:
             self.Height = hr + 1
+            return self.Height
 
     def rotateright(self):
         q = self.Left
@@ -104,7 +106,7 @@ class node:
             else:
                 self.Right.insert(k)
         self.balance()
-        return
+        return self.height
 
     def findmin(self):
         if self.Left == None:
