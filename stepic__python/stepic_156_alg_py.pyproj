@@ -6,7 +6,7 @@
     <ProjectGuid>64353dcf-3707-414f-becc-23c2f122c385</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>w3_s2_4_qsort.py</StartupFile>
+    <StartupFile>w6_s3_11.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,6 +24,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="w3_s2_4_qsort.py" />
+    <Compile Include="w3_s2_8.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="w3_s3_11.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="w5_s2_13.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="w6_s1_8.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="w6_s2_13.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="w6_s3_10.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="w6_s3_11.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
