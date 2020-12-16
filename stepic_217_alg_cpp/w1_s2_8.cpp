@@ -23,7 +23,8 @@ int main()
 	fib[0] = 0;
 	fib[1] = 1;
 	long long t = 0;
-	for (long long j = 2; j < n; ++j) {
+	// for (long long j = 2; j < n; ++j) {
+	for (long long j = 2; j < m*m+1; ++j) {	
 		fib.push_back((fib[j - 1] + fib[j - 2]) % m);
 		++t;
 		if ((fib[j] == 1) && (fib[j - 1] == 0)) break;
